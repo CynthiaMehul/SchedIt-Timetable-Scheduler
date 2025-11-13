@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timetable</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+        th { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+<h1>Generated Timetable</h1>
+
+{% if skipped_courses %}
+    <h2>Skipped Courses (Due to Clashes)</h2>
+    <ul>
+    {% for code, name, slot_name in skipped_courses %}
+        <li>{{ code }} - {{ name }} ({{ slot_name }})</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+<table>
+    <tr>
+        <th>Day/Time</th>
+        {% for hour in hours %}
+            <th>{{ hour }}</th>
+        {% endfor %}
+    </tr>
+
+    {% for day, day_schedule in days_schedule %}
+    <tr>
+        <th>{{ day }}</th>
+        {% for course in day_schedule %}
+            <td>{{ course }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>

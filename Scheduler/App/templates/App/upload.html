@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchedIt</title>
+</head>
+<body>
+    <h1>Paste</h1>
+    <form action="{% url 'parser' %}" method="post">
+    {% csrf_token %}
+    <label for="content">Paste your text:</label><br>
+    <textarea id="content" name="content" rows="6" cols="60" placeholder="Paste your text here" required></textarea><br>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
