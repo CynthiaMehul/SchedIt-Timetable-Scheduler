@@ -1,30 +1,31 @@
-## Title of the Project
-Small description about the project like one below
-The integration of a chatbot within a hostel booking system, aimed at streamlining the reservation process for students and improving the overall user experience.
+## SchedIt – A Genetic Algorithm–Based Automatic Timetable Scheduler
+
+SchedIt is an intelligent timetable generation system that uses genetic algorithms to automatically create optimized, conflict-free schedules within seconds. It eliminates manual planning, reduces human errors, and ensures efficient time allocation for classes and events.
 
 ## About
-<!--Detailed Description about the project-->
-Tailored Chatbot for Hostel Booking System is a project designed to integrate a chatbot that leverages advanced natural language processing techniques to understand and respond to user queries to the hostel booking system. Traditional hostel booking processes are often time-consuming and involve manual searches and extensive communication with hostel staff. This project seeks to overcome these challenges by creating an easy-to-use chatbot interface that assists students in addressing inquiries.
+
+SchedIt is an timetable automation system designed to generate optimized schedules using genetic algorithms. Traditional timetable creation is often slow, repetitive and prone to human errors especially when dealing with multiple subjects, faculty availability and time conflicts. SchedIt addresses these challenges by providing a automated solution that arranges all constraints to produce a valid and efficient timetable within seconds. The system uses genetic algorithm principles such as selection, crossover, and mutation to explore different timetable combinations and evolve towards the best possible solution. By continuously improving candidate schedules, SchedIt ensures minimal conflicts, balanced time distribution and optimal resource utilization. Built as a lightweight and user-friendly web application, SchedIt allows users to input subjects, slots, and constraints through a simple interface. Once submitted, the system processes the data and instantly generates a timetable. The platform aims to reduce manual workload, improve scheduling accuracy deliver a fast and reliable timetable generation experience.
 
 ## Features
-<!--List the features of the project as shown below-->
-- Implements advance neural network method.
-- A framework based application for deployment purpose.
-- High scalability.
-- Less time complexity.
-- A specific scope of Chatbot response model, using json data format.
+
+- Implements a Genetic Algorithm for optimized timetable generation.
+- Automatically creates conflict-free schedules in seconds.
+- User-friendly web interface for entering subjects and fix slots.
+- Efficient search and optimization with low time complexity.
+- Generates outputs in structured format for easy export.
+- Minimal manual intervention due to fully automated scheduling.
 
 ## Requirements
-<!--List the requirements of the project as shown below-->
-* Operating System: Requires a 64-bit OS (Windows 10 or Ubuntu) for compatibility with deep learning frameworks.
-* Development Environment: Python 3.6 or later is necessary for coding the sign language detection system.
-* Deep Learning Frameworks: TensorFlow for model training, MediaPipe for hand gesture recognition.
-* Image Processing Libraries: OpenCV is essential for efficient image processing and real-time hand gesture recognition.
-* Version Control: Implementation of Git for collaborative development and effective code management.
-* IDE: Use of VSCode as the Integrated Development Environment for coding, debugging, and version control integration.
-* Additional Dependencies: Includes scikit-learn, TensorFlow (versions 2.4.1), TensorFlow GPU, OpenCV, and Mediapipe for deep learning tasks.
+
+* Operating System: Works on any 64-bit OS such as Windows 10/11, Ubuntu, or macOS.
+* Programming Language: Python 3.8 or later for implementing the genetic algorithm and backend logic.
+* Web Framework: Django for backend development and deployment.
+* Frontend Technologies: HTML, CSS, JavaScript.
+* Algorithm Libraries: NumPy for handling arrays, computations, and genetic algorithm operations.
+* IDE / Code Editor: VSCode recommended for coding, debugging, and extension support.
 
 ## System Architecture
+
 <!--Embed the system architecture diagram as shown below-->
 
 ![Screenshot 2023-11-25 133637](https://github.com/<<yourusername>>/Hand-Gesture-Recognition-System/assets/75235455/a60c11f3-0a11-47fb-ac89-755d5f45c995)
@@ -43,17 +44,6 @@ Tailored Chatbot for Hostel Booking System is a project designed to integrate a 
 Detection Accuracy: 96.7%
 Note: These metrics can be customized based on your actual performance evaluations.
 
-
 ## Results and Impact
-<!--Give the results and impact as shown below-->
-The Sign Language Detection System enhances accessibility for individuals with hearing and speech impairments, providing a valuable tool for inclusive communication. The project's integration of computer vision and deep learning showcases its potential for intuitive and interactive human-computer interaction.
 
-This project serves as a foundation for future developments in assistive technologies and contributes to creating a more inclusive and accessible digital environment.
-
-## Articles published / References
-1. N. S. Gupta, S. K. Rout, S. Barik, R. R. Kalangi, and B. Swampa, “Enhancing Heart Disease Prediction Accuracy Through Hybrid Machine Learning Methods ”, EAI Endorsed Trans IoT, vol. 10, Mar. 2024.
-2. A. A. BIN ZAINUDDIN, “Enhancing IoT Security: A Synergy of Machine Learning, Artificial Intelligence, and Blockchain”, Data Science Insights, vol. 2, no. 1, Feb. 2024.
-
-
-
-
+SchedIt significantly improves the efficiency and accuracy of timetable creation by automating the entire scheduling process. The system’s genetic algorithm ensures optimal subject slot allocation, minimizes conflicts and reduces the time required to generate a complete timetable from hours to just a few seconds. This leads to higher productivity and eliminates the frustration associated with manual scheduling. The automated approach also ensures fairness in time distribution and balanced workload. Generates error-free schedules without the need for extensive human intervention.
