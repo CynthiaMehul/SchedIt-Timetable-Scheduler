@@ -1,4 +1,4 @@
-## SchedIt – A Genetic Algorithm–Based Automatic Timetable Scheduler
+## SchedIt – A Genetic Algorithm Based Automatic Timetable Scheduler
 
 SchedIt is an intelligent timetable generation system that uses genetic algorithms to automatically create optimized, conflict-free schedules within seconds. It eliminates manual planning, reduces human errors, and ensures efficient time allocation for classes and events.
 
