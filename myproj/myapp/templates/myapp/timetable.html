@@ -1,0 +1,305 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Generated Timetable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    
+    <style>
+        /* ---- PAGE BACKGROUND ---- */
+        body {
+            background: #0e0e11;
+            color: #e5e5e5;
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        h1 {
+            color: #d8c3ff;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(98, 52, 255, 0.4);
+            text-align: center;
+        }
+
+        /* ---- WRAPPER FOR PDF EXPORT ---- */
+        #contentToExport {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #0e0e11; 
+        }
+
+        /* ---- TABLE STYLING ---- */
+        .table-container {
+            background: #1a1a20;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #2a2a32;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden; 
+            max-width: 95%;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px 25px;
+            text-align: center;
+            border: 1px solid #2a2a32;
+        }
+
+        /* ---- THE PURPLE HEADERS (Hours Row) ---- */
+        thead th {
+            background: linear-gradient(135deg, #6234ff, #8c49ff);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+        }
+
+        /* ---- THE PURPLE SIDEBAR (Days Column) ---- */
+        tbody tr td:first-child {
+            background: #261b38; 
+            color: #d8c3ff;      
+            font-weight: 700;
+            border-right: 2px solid #6234ff; 
+        }
+
+        /* ---- COURSE CELLS ---- */
+        tbody td {
+            background: #202026;
+            font-size: 0.95rem;
+        }
+
+        tbody td:not(:first-child) {
+            color: #eee;
+        }
+
+        /* ---- SKIPPED COURSES ---- */
+        .skipped-section {
+            margin-top: 30px;
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid #ff4d4d;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 100%;
+        }
+        .skipped-section h3 {
+            color: #ff4d4d;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .skipped-section ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .skipped-section li {
+            color: #ffcccc;
+            margin-bottom: 5px;
+        }
+
+        /* ---- ACTION BUTTONS ---- */
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* SHARED BUTTON STYLES */
+        .btn-custom {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 1. BACK BUTTON (Outline) */
+        .back-link {
+            background: transparent;
+            border: 2px solid #6234ff;
+            color: #d8c3ff;
+        }
+        .back-link:hover {
+            background: #6234ff;
+            color: white;
+            box-shadow: 0 0 15px rgba(98, 52, 255, 0.5);
+        }
+
+        /* 2. REGENERATE BUTTON (Blue Gradient) */
+        .regen-btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+        }
+        .regen-btn:hover {
+            box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6);
+        }
+
+        /* 3. PDF BUTTON (Pink/Red Gradient) */
+        .pdf-btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+        }
+        .pdf-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 75, 43, 0.6);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="contentToExport">
+        <h1>Generated Timetable</h1>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day / Hour</th>
+                        {% for h in hours %}
+                            <th>{{ h }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day, row in days_schedule %}
+                    <tr>
+                        <td>{{ day }}</td>
+                        {% for code in row %}
+                            <td>
+                                {% if code %}
+                                    <span style="color: white; font-weight: 500;">{{ code }}</span>
+                                {% else %}
+                                    <span style="color: #444;">-</span>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if skipped_courses %}
+            <div class="skipped-section">
+                <h3>⚠️ Skipped / Couldn't place</h3>
+                <ul>
+                    {% for code, name, slot in skipped_courses %}
+                        <li><strong>{{ code }}</strong> - {{ name }} (Tried slot: {{ slot }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="action-buttons">
+        
+        <a href="{% url 'myapp:edit_courses' %}" class="btn-custom back-link">
+            &larr; Back to Edit
+        </a>
+        
+        <button onclick="window.location.reload()" class="btn-custom regen-btn">
+            &#x21bb; Regenerate
+        </button>
+
+        {% comment %} <button onclick="generatePDF()" class="btn-custom pdf-btn">
+            Export as PDF
+        </button> {% endcomment %}
+      <button onclick="exportPNG()" class="btn-custom pdf-btn">
+          Export as PNG
+       </button>
+  
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    {% comment %} <script> {% endcomment %}
+{% comment %} function generatePDF() {
+
+    const element = document.getElementById('contentToExport');
+
+    const opt = {
+        margin: 5,
+        filename: 'my_timetable.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+            scale: 3,                 // higher quality
+            useCORS: true,
+            scrollX: 0,
+            scrollY: -window.scrollY,
+            backgroundColor: '#0e0e11'
+        },
+        jsPDF: { 
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'landscape'
+        },
+        pagebreak: {
+            mode: ['css', 'avoid-all', 'legacy'],
+            before: '.skipped-section'
+        }
+    };
+
+    // FORCE the content to shrink to PDF width
+    element.style.width = "1150px";   // perfect fit for A4 landscape
+    element.style.transform = "scale(0.88)";
+    element.style.transformOrigin = "top left";
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        // restore original size after exporting
+        element.style.transform = "";
+        element.style.width = "";
+    });
+} {% endcomment %}
+<script>
+function exportPNG() {
+    const element = document.getElementById("contentToExport");
+
+    html2canvas(element, {
+        scale: 3,             // SUPER high resolution PNG
+        backgroundColor: "#0e0e11",
+        scrollX: 0,
+        scrollY: -window.scrollY
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "timetable.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+</script>
+
+
+
+</body>
+</html>

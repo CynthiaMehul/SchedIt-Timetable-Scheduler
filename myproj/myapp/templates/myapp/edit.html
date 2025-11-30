@@ -1,0 +1,264 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Courses</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<style>
+
+    /* ---- PAGE BACKGROUND ---- */
+    body {
+        background: #0e0e11;
+        color: #e5e5e5;
+        font-family: "Inter", sans-serif;
+        /* Add padding to bottom so content isn't hidden behind the floating bar */
+        padding-bottom: 100px; 
+    }
+
+    /* ---- CARD ---- */
+    .course-card {
+        background: #1a1a20;
+        border-radius: 14px;
+        padding: 20px;
+        border: 1px solid #2a2a32;
+        transition: 0.25s;
+        cursor: pointer;
+        box-shadow: 0 0 8px rgba(120, 40, 200, 0.12);
+        height: 100%; /* Ensure uniform height */
+    }
+
+    /* Hover effect */
+    .course-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 18px rgba(160, 70, 255, 0.35);
+        border-color: #6234ff;
+    }
+
+    /* Selected card */
+    .selected-card {
+        border: 2px solid #9b59ff !important;
+        background: #261b38 !important;
+        box-shadow: 0 0 20px rgba(160, 70, 255, 0.6);
+    }
+
+    /* Slot dropdown */
+    .form-select {
+        background: #24242c;
+        color: #eee;
+        border: 1px solid #3c3c4a;
+    }
+    .form-select:focus {
+        border-color: #8c49ff;
+        box-shadow: 0 0 5px rgba(140, 73, 255, 0.8);
+    }
+
+    /* ---- FLOATING TRACKER BAR ---- */
+    .floating-tracker {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        
+        background: rgba(26, 26, 32, 0.9); /* Semi-transparent dark */
+        backdrop-filter: blur(10px); /* Glassmorphism blur */
+        border: 1px solid #6234ff;
+        padding: 15px 30px;
+        border-radius: 50px; /* Pill shape */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        width: max-content;
+        min-width: 320px;
+        justify-content: space-between;
+    }
+
+    .tracker-text {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #d8c3ff;
+    }
+
+    /* Credit counter number */
+    #totalCredits {
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.2rem;
+    }
+
+    /* Submit button (inside tracker) */
+    .submit-btn {
+        background: linear-gradient(135deg, #6a00f4, #9b4dff);
+        border: none;
+        padding: 10px 24px;
+        border-radius: 30px;
+        color: white;
+        font-weight: 700;
+        font-size: 15px;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+    .submit-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 14px rgba(155, 77, 255, 0.7);
+    }
+    .submit-btn:disabled {
+        background: #444;
+        cursor: not-allowed;
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h2 class="fw-bold mb-5 text-center" style="color:#d8c3ff;">Select Your Courses</h2>
+
+    {% if error %}
+        <div class="alert alert-danger fw-bold">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" id="selectForm">
+        {% csrf_token %}
+
+        <div class="row">
+            {% for code, info in courses.items %}
+            <div class="col-md-4 mb-4">
+
+                <input type="checkbox" name="selected_courses"
+                       value="{{ code }}" class="hidden-checkbox"
+                       style="display:none;"
+                       {% if code in request.session.selected_codes %}checked{% endif %}>
+
+                <div class="course-card"
+                     onclick="toggleCourse(this)"
+                     data-code="{{ code }}"
+                     data-credits="{{ info.credits }}">
+
+                    <h5 class="fw-bold text-light">{{ info.name }}</h5>
+
+                    <p class="mb-1" style="color:#cfc7ff; font-weight:500;">
+                        Code: 
+                        <span style="color:#e8e3ff; font-weight:600;">{{ code }}</span>
+                    </p>
+
+                    <p class="mb-2" style="color:#cfc7ff; font-weight:500;">
+                        Credits:
+                        <span class="credit" style="color:#d9b8ff; font-weight:600;">
+                            {{ info.credits }}
+                        </span>
+                    </p>
+
+                    <label class="fw-bold small" onclick="event.stopPropagation()">Slot (optional):</label>
+                    <select class="form-select mt-1" name="slot_{{ code }}" onclick="event.stopPropagation()">
+                        <option value="">-- Leave Unfixed --</option>
+                        {% for slot in info.slots %}
+                            <option value="{{ forloop.counter0 }}">
+                                {{ slot.slot_name }} | {{ slot.faculty }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </form>
+</div>
+
+<div class="floating-tracker">
+    <div class="tracker-text">
+        Credits: <span id="totalCredits">0</span> / 30
+    </div>
+    
+    <button type="submit" form="selectForm" class="submit-btn">
+        Generate TimeTable
+    </button>
+</div>
+<!-- Clear client-side persisted selections only when extension opened edit with ?new=1 -->
+{% if request.GET.new == '1' %}
+<script>
+  // Only remove entries we use for selection highlights — be conservative
+  try {
+    localStorage.removeItem("selectedCourses");
+    localStorage.removeItem("selectedCourseCredits");
+    // If you used different keys, remove them too:
+    // localStorage.removeItem("selected_codes_local");
+  } catch (e) {
+    console.warn("Failed to clear localStorage keys:", e);
+  }
+</script>
+{% endif %}
+<script>
+    // Toggle selection
+    function toggleCourse(card) {
+        let checkbox = card.parentElement.querySelector(".hidden-checkbox");
+        checkbox.checked = !checkbox.checked;
+
+        if (checkbox.checked) {
+            card.classList.add("selected-card");
+        } else {
+            card.classList.remove("selected-card");
+        }
+
+        recalcCredits();
+    }
+
+    // Recalculate credits
+    function recalcCredits() {
+        let total = 0;
+        document.querySelectorAll(".hidden-checkbox").forEach(cb => {
+            if (cb.checked) {
+                let card = cb.closest(".col-md-4").querySelector(".course-card");
+                total += parseInt(card.getAttribute("data-credits"));
+            }
+        });
+
+        // Update the number in the floating bar
+        document.getElementById("totalCredits").textContent = total;
+
+        // Enforce credit limit
+        let btn = document.querySelector(".submit-btn");
+        let trackerText = document.querySelector("#totalCredits");
+
+        if (total > 30) {
+            btn.disabled = true;
+            btn.innerText = "Limit Exceeded";
+            btn.style.opacity = "0.6";
+            trackerText.style.color = "#ff4d4d"; // Turn text red
+        } else {
+            btn.disabled = false;
+            btn.innerText = "Generate TimeTable";
+            btn.style.opacity = "1";
+            trackerText.style.color = "#fff"; // Reset text color
+        }
+    }
+    function restoreSelections() {
+    // Restore course selections
+    document.querySelectorAll(".hidden-checkbox").forEach(cb => {
+        if (cb.checked) {
+            let card = cb.closest(".col-md-4").querySelector(".course-card");
+            card.classList.add("selected-card");
+        }
+    });
+    recalcCredits();
+    }
+    // On page load: recalc credits
+    
+    
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", restoreSelections);
+</script>
+
+
+</body>
+</html>
