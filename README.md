@@ -26,23 +26,21 @@ SchedIt is an timetable automation system designed to generate optimized schedul
 
 ## System Architecture
 
-<!--Embed the system architecture diagram as shown below-->
-
-![Screenshot 2023-11-25 133637](https://github.com/<<yourusername>>/Hand-Gesture-Recognition-System/assets/75235455/a60c11f3-0a11-47fb-ac89-755d5f45c995)
-
+<img width="691" height="344" alt="image" src="https://github.com/user-attachments/assets/14692fa6-f93a-4d57-8cd2-da03d7351a06" />
 
 ## Output
 
-<!--Embed the Output picture at respective places as shown below as shown below-->
-#### Output1 - Name of the output
+#### Output1 - Extension
 
-![Screenshot 2023-11-25 134037](https://github.com/<<yourusername>>/Hand-Gesture-Recognition-System/assets/75235455/8c2b6b5c-5ed2-4ec4-b18e-5b6625402c16)
+<img width="913" height="512" alt="image" src="https://github.com/user-attachments/assets/48de7405-ea29-4009-86ae-8a35770f88e2" />
 
-#### Output2 - Name of the output
-![Screenshot 2023-11-25 134253](https://github.com/<<yourusername>>/Hand-Gesture-Recognition-System/assets/75235455/5e05c981-05ca-4aaa-aea2-d918dcf25cb7)
+#### Output2 - Course Display Page
 
-Detection Accuracy: 96.7%
-Note: These metrics can be customized based on your actual performance evaluations.
+<img width="973" height="544" alt="image" src="https://github.com/user-attachments/assets/80ee19de-374b-400c-8215-c1ba7d695cfa" />
+
+#### Output3 - Final TimeTable
+
+<img width="964" height="536" alt="image" src="https://github.com/user-attachments/assets/19386c4a-d863-45b8-aa4f-e21e0099df5a" />
 
 ## Results and Impact
 
